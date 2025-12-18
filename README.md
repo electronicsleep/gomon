@@ -1,8 +1,9 @@
-# GoMonitor
+# gomon
 
-Purpose: Golang application to monitor servers using prometheus metrics
+Purpose: Go app to monitor servers using prometheus metrics
 
 http://localhost:8080/logs
+
 http://localhost:8080/metrics
 
 ```
