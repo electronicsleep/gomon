@@ -1,5 +1,5 @@
 // Author: https://github.com/electronicsleep
-// Purpose: Golang application to monitor servers using prometheus metrics
+// Purpose: go app to monitor servers using prometheus metrics
 // Released under the MIT License
 
 package main
