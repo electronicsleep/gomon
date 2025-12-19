@@ -2,7 +2,7 @@
 
 Purpose: Go app to monitor servers using prometheus metrics
 
-Simple barebones monitor for when your real monitoring system is down
+Simple monitor that tracks response time
 
 http://localhost:8080/logs
 

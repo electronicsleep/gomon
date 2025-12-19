@@ -1,5 +1,5 @@
 // Author: https://github.com/electronicsleep
-// Purpose: go app to monitor servers using prometheus metrics
+// Purpose: Golang application to monitor servers using prometheus metrics
 // Released under the MIT License
 
 package main
@@ -85,7 +85,7 @@ func logOutput(cmd string, cmdOut string) {
 }
 
 func httpLogs(w http.ResponseWriter, r *http.Request) {
-	file, err := os.Open("GoMonitor.log")
+	file, err := os.Open("gomon.log")
 	if err != nil {
 		panic(err)
 	}
@@ -110,7 +110,7 @@ func httpLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func logMerics(msg string) {
-	file, err := os.OpenFile("GoMonitorMetrics.log", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+	file, err := os.OpenFile("gomon_metrics.log", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -123,7 +123,7 @@ func logMerics(msg string) {
 }
 
 func logMericsAppend(msg string) {
-	file, err := os.OpenFile("GoMonitorMetrics.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	file, err := os.OpenFile("gomon_metrics.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -137,7 +137,7 @@ func logMericsAppend(msg string) {
 
 // Prometheus metrics
 func httpMetrics(w http.ResponseWriter, r *http.Request) {
-	file, err := os.Open("GoMonitorMetrics.log")
+	file, err := os.Open("gomon_metrics.log")
 	if err != nil {
 		panic(err)
 	}
@@ -174,15 +174,15 @@ func runMonitor() {
 	var state stateStruct
 
 	if single {
-		fmt.Println("INFO: SINGLE RUN")
-		logOutput("INFO:", "CHECK: GoMonitor SINGLE")
+		fmt.Println("INFO: Single run")
+		logOutput("INFO:", "CHECK: gomon single run")
 		checkSites(state)
 		fmt.Println("INFO: exit")
 		os.Exit(0)
 	} else {
 		fmt.Println("INFO: LOOP RUN")
 		fmt.Println("INFO: Runtime:", loop, "minutes")
-		logOutput("INFO:", "CHECK: GoMonitor Loop")
+		logOutput("INFO:", "CHECK: gomon Loop")
 		for {
 			loop++
 			state = checkSites(state)
@@ -352,8 +352,8 @@ func main() {
 	state.getState()
 	fmt.Println("INFO: state:", state)
 
-	fmt.Println("INFO: Starting GoMonitor: Hostname: " + state.Hostname)
-	postMessage("INFO: Starting GoMonitor: Hostname: " + state.Hostname)
+	fmt.Println("INFO: Starting gomon hostname: " + state.Hostname)
+	postMessage("INFO: Starting gomon hostname: " + state.Hostname)
 
 	var config configStruct
 	config.getConfig()
@@ -372,7 +372,7 @@ func main() {
 	}
 
 	// Start logging
-	file, err := os.OpenFile("GoMonitor.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	file, err := os.OpenFile("gomon.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	checkFatal("ERROR: opening file", err)
 
 	defer file.Close()
