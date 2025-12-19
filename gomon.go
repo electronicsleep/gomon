@@ -195,8 +195,8 @@ func runMonitor() {
 func checkSites(state stateStruct) stateStruct {
 	urls := return_url()
 	if verbose {
-		fmt.Println("verbose on")
-		fmt.Println("urls:", urls)
+		fmt.Println("INFO: verbose on")
+		fmt.Println("INFO: urls:", urls)
 	}
 
 	fmt.Print("INFO: state.ErrorNum: ")

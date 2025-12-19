@@ -25,9 +25,9 @@ go.work.sum
 .env
 
 # binary
-GoMonitor
-bin/GoMonitor
+gomon
+bin/gomon
 
 # logs
-GoMonitor.log
-GoMonitorMetrics.log
+gomon.log
+gomon_metrics.log
