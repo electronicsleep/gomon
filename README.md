@@ -8,6 +8,12 @@ http://localhost:8080/logs
 
 http://localhost:8080/metrics
 
+Run
+```
+./gomon -w
+```
+
+Metrics
 ```
 https___go_dev time_ms
 ```

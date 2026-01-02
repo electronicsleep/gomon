@@ -236,7 +236,7 @@ func checkSites(state stateStruct) stateStruct {
 				defer res.Body.Close()
 			}
 
-			fmt.Print("INFO: errorNum ")
+			fmt.Print("INFO: errorNum: ")
 			fmt.Println(errorNum)
 			fmt.Print("INFO: state.ErrorNum: ")
 			fmt.Println(state.ErrorNum)
