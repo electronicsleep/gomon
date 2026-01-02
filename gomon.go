@@ -180,9 +180,9 @@ func runMonitor() {
 		fmt.Println("INFO: exit")
 		os.Exit(0)
 	} else {
-		fmt.Println("INFO: LOOP RUN")
-		fmt.Println("INFO: Runtime:", loop, "minutes")
-		logOutput("INFO:", "CHECK: gomon Loop")
+		fmt.Println("INFO: gomon loop run")
+		fmt.Println("INFO: runtime:", loop, "minutes")
+		logOutput("INFO:", "gomon loop run")
 		for {
 			loop++
 			state = checkSites(state)

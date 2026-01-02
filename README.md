@@ -10,6 +10,8 @@ http://localhost:8080/metrics
 
 Run
 ```
+make
+make test
 ./gomon -w
 ```
 
