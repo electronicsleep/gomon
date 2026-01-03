@@ -1,4 +1,5 @@
 build:
+	gofmt -s -w .
 	go build -o gomon gomon.go
 
 linux:

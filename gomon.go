@@ -31,7 +31,7 @@ var single = false
 var threshold = 500
 
 // Minutes to sleep between runs
-const sleepInterval time.Duration = 1
+const sleepInterval time.Duration = time.Minute * 1
 
 // Webserver: Run webserver to show log output
 var webserver = false
@@ -186,8 +186,8 @@ func runMonitor() {
 		for {
 			loop++
 			state = checkSites(state)
-			fmt.Println("INFO: Checking again in:", time.Minute*sleepInterval)
-			time.Sleep(time.Minute * sleepInterval)
+			fmt.Println("INFO: sleep check again:", sleepInterval)
+			time.Sleep(sleepInterval)
 		}
 	}
 }
@@ -216,9 +216,10 @@ func checkSites(state stateStruct) stateStruct {
 			tf := t.Format("2006.01.02-15.04.05:000")
 			start := time.Now().UnixNano() / int64(time.Millisecond)
 
-			fmt.Println("INFO: n:", n)
+			fmt.Println("INFO: n:", n, "of", checkNum)
 			fmt.Println("INFO: requestURL:", requestURL)
 			res, err := http.Get(requestURL)
+			// MOVE THIS BLOCK DOWN
 			if err != nil {
 				state.getState()
 				errorNum += 1
@@ -246,8 +247,9 @@ func checkSites(state stateStruct) stateStruct {
 			tf_end := t_end.Format("2006.01.02-15.04.05:000")
 			end := time.Now().UnixNano() / int64(time.Millisecond)
 			duration := end - start
-			fmt.Println("INFO: Duration(ms):", duration)
-			fmt.Println("INFO: Threshold:", threshold)
+			logOutput("INFO: requestURL", requestURL+" Duration(ms) "+strconv.FormatInt(duration, 10)+" threshold "+strconv.Itoa(threshold))
+			fmt.Println("INFO: requestURL", requestURL, "Duration(ms)", duration, "threshold", threshold)
+			fmt.Println("DEBUG: Threshold:", threshold)
 			durationDiffInt := int(duration)
 			if durationDiffInt > threshold {
 				thresholdReachedNum += 1
@@ -272,8 +274,8 @@ func checkSites(state stateStruct) stateStruct {
 			fmt.Println("INFO: time_start:", tf)
 			fmt.Println("INFO: time_end:", tf_end)
 		}
-		fmt.Println("INFO: sleep")
-		time.Sleep(time.Minute * sleepInterval)
+		fmt.Println("INFO: sleep check again:", sleepInterval)
+		time.Sleep(sleepInterval)
 		state.RunNum += 1
 	}
 	return state
