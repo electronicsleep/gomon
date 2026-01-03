@@ -216,7 +216,7 @@ func checkSites(state stateStruct) stateStruct {
 			tf := t.Format("2006.01.02-15.04.05:000")
 			start := time.Now().UnixNano() / int64(time.Millisecond)
 
-			fmt.Println("INFO: n:", n, "of", checkNum)
+			fmt.Println("INFO: check: n:", n, "of", checkNum)
 			fmt.Println("INFO: requestURL:", requestURL)
 			res, err := http.Get(requestURL)
 			// MOVE THIS BLOCK DOWN
@@ -249,7 +249,7 @@ func checkSites(state stateStruct) stateStruct {
 			duration := end - start
 			logOutput("INFO: requestURL", requestURL+" Duration(ms) "+strconv.FormatInt(duration, 10)+" threshold "+strconv.Itoa(threshold))
 			fmt.Println("INFO: requestURL", requestURL, "Duration(ms)", duration, "threshold", threshold)
-			fmt.Println("DEBUG: Threshold:", threshold)
+			fmt.Println("INFO: Threshold:", threshold)
 			durationDiffInt := int(duration)
 			if durationDiffInt > threshold {
 				thresholdReachedNum += 1
