@@ -174,8 +174,8 @@ func runMonitor() {
 	var state stateStruct
 
 	if single {
-		fmt.Println("INFO: Single run")
-		logOutput("INFO:", "CHECK: gomon single run")
+		fmt.Println("INFO: single run")
+		logOutput("INFO:", "check: gomon single run")
 		checkSites(state)
 		fmt.Println("INFO: exit")
 		os.Exit(0)
@@ -224,16 +224,16 @@ func checkSites(state stateStruct) stateStruct {
 				state.getState()
 				errorNum += 1
 				errStr := err.Error()
-				logOutput("CHECK_ERROR:", requestURL+" error: "+errStr)
+				logOutput("ERROR:", requestURL+" error: "+errStr)
 				fmt.Printf("ERROR: errorNum: %d errorNumAlert: %d err: %s\n", state.ErrorNum, errorNumAlert, err)
 				if state.ErrorNum >= errorNumAlert {
 					postMessage("ALERT: error with site over 2 errors: " + requestURL + ": " + strconv.Itoa(state.ErrorNum) + " Date: " + tf)
 				}
-				fmt.Println("CHECK: error with site: host: " + requestURL + " count: " + strconv.Itoa(state.ErrorNum) + " Date: " + tf)
+				fmt.Println("check: error with site: host: " + requestURL + " count: " + strconv.Itoa(state.ErrorNum) + " Date: " + tf)
 			} else {
-				logOutput("INFO: CHECK_OK", requestURL)
-				fmt.Println("INFO: CHECK_OK", requestURL)
-				fmt.Printf("INFO: client: status code: %d\n", res.StatusCode)
+				logOutput("INFO: client ok", requestURL)
+				fmt.Println("INFO: client ok", requestURL, "status_code", res.StatusCode)
+				//fmt.Printf("INFO: client: status code: %d\n", res.StatusCode)
 				defer res.Body.Close()
 			}
 
@@ -247,15 +247,15 @@ func checkSites(state stateStruct) stateStruct {
 			tf_end := t_end.Format("2006.01.02-15.04.05:000")
 			end := time.Now().UnixNano() / int64(time.Millisecond)
 			duration := end - start
-			logOutput("INFO: requestURL", requestURL+" Duration(ms) "+strconv.FormatInt(duration, 10)+" threshold "+strconv.Itoa(threshold))
-			fmt.Println("INFO: requestURL", requestURL, "Duration(ms)", duration, "threshold", threshold)
-			fmt.Println("INFO: Threshold:", threshold)
+			logOutput("INFO: requestURL", requestURL+" duration(ms) "+strconv.FormatInt(duration, 10)+" threshold "+strconv.Itoa(threshold))
+			fmt.Println("INFO: requestURL", requestURL, "duration(ms)", duration, "threshold", threshold)
+			fmt.Println("INFO: threshold:", threshold)
 			durationDiffInt := int(duration)
 			if durationDiffInt > threshold {
 				thresholdReachedNum += 1
-				fmt.Println("INFO: OVER Threshold Duration(ms):", duration, "thresholdReachedNum ", thresholdReachedNum)
+				fmt.Println("INFO: OVER threshold duration(ms):", duration, "thresholdReachedNum ", thresholdReachedNum)
 				if thresholdReachedNum > 1 {
-					postMessage("ALERT: error site over threshold: " + requestURL + ": Duration(ms): " + strconv.Itoa(durationDiffInt) + " Date: " + tf)
+					postMessage("ALERT: error site over threshold: " + requestURL + ": duration(ms): " + strconv.Itoa(durationDiffInt) + " Date: " + tf)
 				}
 			}
 			newStr := strings.Replace(requestURL, ":", "_", -1)
@@ -292,9 +292,9 @@ func postMessage(message string) {
 	config.getConfig()
 	fmt.Println("INFO: config", config)
 	if config.SlackURL == "" {
-		fmt.Println("INFO: SlackMsg empty no messsages will be sent")
+		fmt.Println("INFO: postSlack empty no messsages will be sent")
 	} else {
-		fmt.Println("INFO: SlackMsg found messages will be sent")
+		fmt.Println("INFO: postSlack ound messages will be sent")
 		postSlack(message)
 	}
 }
@@ -343,10 +343,10 @@ func connected() (ok bool) {
 }
 
 func main() {
-	verboseFlag := flag.Bool("v", false, "Verbose checks")
-	singleFlag := flag.Bool("s", single, "Single checks")
-	thresholdFlag := flag.Int("t", threshold, "Threshold checks")
-	webserverFlag := flag.Bool("w", false, "Run webserver")
+	verboseFlag := flag.Bool("v", false, "verbose checks")
+	singleFlag := flag.Bool("s", single, "single checks")
+	thresholdFlag := flag.Int("t", threshold, "threshold checks")
+	webserverFlag := flag.Bool("w", false, "run webserver")
 
 	flag.Parse()
 
@@ -367,10 +367,10 @@ func main() {
 	webserver = *webserverFlag
 
 	if verbose {
-		fmt.Println("INFO: Verbose:", verbose)
-		fmt.Println("INFO: Single:", single)
-		fmt.Println("INFO: Threshold:", threshold)
-		fmt.Println("INFO: Webserver:", webserver)
+		fmt.Println("INFO: verbose:", verbose)
+		fmt.Println("INFO: single:", single)
+		fmt.Println("INFO: threshold:", threshold)
+		fmt.Println("INFO: webserver:", webserver)
 	}
 
 	// Start logging
@@ -380,13 +380,13 @@ func main() {
 	defer file.Close()
 	log.SetOutput(file)
 
-	fmt.Println("INFO: Detect OS:", runtime.GOOS)
-	fmt.Println("INFO: CPU Cores:", runtime.NumCPU())
+	fmt.Println("INFO: detect os:", runtime.GOOS)
+	fmt.Println("INFO: cpu cores:", runtime.NumCPU())
 
 	if webserver {
 		go runMonitor()
-		fmt.Println("INFO: Running webserver mode: http://localhost:8080/logs")
-		fmt.Println("INFO: Running webserver mode: http://localhost:8080/metrics")
+		fmt.Println("INFO: running webserver mode: http://localhost:8080/logs")
+		fmt.Println("INFO: running webserver mode: http://localhost:8080/metrics")
 		http.Handle("/", http.FileServer(http.Dir("./src")))
 		http.HandleFunc("/logs", httpLogs)
 		http.HandleFunc("/metrics", httpMetrics)
@@ -394,7 +394,7 @@ func main() {
 			checkFatal("ERROR: webserver: ", err)
 		}
 	} else {
-		fmt.Println("INFO: Running console mode")
+		fmt.Println("INFO: /running console mode")
 		runMonitor()
 	}
 }
