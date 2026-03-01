@@ -1,9 +1,5 @@
 build:
-	gofmt -s -w .
-	go build -o gomon gomon.go
-
-linux:
 	./build.sh
 
 test: build
-	./gomon -w -v -s
+	./bin/gomon -w -v -s
