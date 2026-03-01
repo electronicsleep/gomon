@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+cd src
 gofmt -s -w .
 mkdir -p bin
 GOOS=linux GOARCH=amd64 go build -o bin/gomon_amd64 gomon.go
