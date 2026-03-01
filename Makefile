@@ -2,4 +2,4 @@ build:
 	./build.sh
 
 test: build
-	./bin/gomon -w -v -s
+	./src/bin/gomon -w -v -s
