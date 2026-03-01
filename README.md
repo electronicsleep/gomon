@@ -12,7 +12,7 @@ Run
 ```
 make
 make test
-./gomon -w
+./src/bin/gomon -w
 ```
 
 Metrics
