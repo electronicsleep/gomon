@@ -234,7 +234,7 @@ func checkSites(state stateStruct) stateStruct {
 				logOutput("INFO: client ok", requestURL)
 				fmt.Println("INFO: client ok", requestURL, "status_code", res.StatusCode)
 				//fmt.Printf("INFO: client: status code: %d\n", res.StatusCode)
-				defer res.Body.Close()
+				res.Body.Close()
 			}
 
 			fmt.Print("INFO: errorNum: ")
@@ -336,10 +336,13 @@ func postSlack(message string) {
 	}
 }
 
-func connected() (ok bool) {
-	_, err := http.Get("http://clients3.google.com/generate_204")
-	fmt.Println("ERROR: connected: err", err)
-	return err == nil
+func connected() bool {
+	resp, err := http.Get("http://clients3.google.com/generate_204")
+	if err != nil {
+		return false
+	}
+	resp.Body.Close()
+	return true
 }
 
 func main() {
@@ -387,7 +390,6 @@ func main() {
 		go runMonitor()
 		fmt.Println("INFO: running webserver mode: http://localhost:8080/logs")
 		fmt.Println("INFO: running webserver mode: http://localhost:8080/metrics")
-		http.Handle("/", http.FileServer(http.Dir("./src")))
 		http.HandleFunc("/logs", httpLogs)
 		http.HandleFunc("/metrics", httpMetrics)
 		if err := http.ListenAndServe(":8080", nil); err != nil {
