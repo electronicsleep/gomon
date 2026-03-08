@@ -28,7 +28,7 @@ var verbose = false
 var single = false
 
 // Threshold:
-var threshold = 500
+var threshold = 10000
 
 // Minutes to sleep between runs
 const sleepInterval time.Duration = time.Minute * 1
