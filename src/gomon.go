@@ -109,7 +109,7 @@ func httpLogs(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func logMerics(msg string) {
+func logMetrics(msg string) {
 	file, err := os.OpenFile("gomon_metrics.log", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		log.Fatal(err)
@@ -122,7 +122,7 @@ func logMerics(msg string) {
 	}
 }
 
-func logMericsAppend(msg string) {
+func logMetricsAppend(msg string) {
 	file, err := os.OpenFile("gomon_metrics.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal(err)
@@ -265,10 +265,10 @@ func checkSites(state stateStruct) stateStruct {
 
 			log_str = newStr2 + " " + strconv.Itoa(int(duration))
 			if n == 0 {
-				logMerics("")
-				logMericsAppend(log_str)
+				logMetrics("")
+				logMetricsAppend(log_str)
 			} else {
-				logMericsAppend(log_str)
+				logMetricsAppend(log_str)
 			}
 
 			fmt.Println("INFO: time_start:", tf)
