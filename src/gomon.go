@@ -233,7 +233,6 @@ func checkSites(state stateStruct) stateStruct {
 				logOutput("INFO: client ok", requestURL)
 				fmt.Println("INFO: client ok", requestURL, "status_code", res.StatusCode)
 				io.Copy(io.Discard, res.Body)
-				res.Body.Close()
 			}
 
 			fmt.Print("INFO: errorNum: ")
