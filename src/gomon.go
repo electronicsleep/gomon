@@ -219,7 +219,6 @@ func checkSites(state stateStruct) stateStruct {
 			fmt.Println("INFO: check: n:", n, "of", checkNum)
 			fmt.Println("INFO: requestURL:", requestURL)
 			res, err := http.Get(requestURL)
-			// MOVE THIS BLOCK DOWN
 			if err != nil {
 				state.getState()
 				errorNum += 1
@@ -233,7 +232,7 @@ func checkSites(state stateStruct) stateStruct {
 			} else {
 				logOutput("INFO: client ok", requestURL)
 				fmt.Println("INFO: client ok", requestURL, "status_code", res.StatusCode)
-				//fmt.Printf("INFO: client: status code: %d\n", res.StatusCode)
+				io.Copy(io.Discard, res.Body)
 				res.Body.Close()
 			}
 
@@ -325,7 +324,6 @@ func postSlack(message string) {
 			fmt.Println("ERROR: postSlack: client.Do", error)
 			return
 		}
-		defer response.Body.Close()
 
 		fmt.Println("response Status:", response.Status)
 		fmt.Println("response Headers:", response.Header)
