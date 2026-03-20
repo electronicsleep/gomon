@@ -306,7 +306,7 @@ func postSlack(message string) {
 	send_text := message + ": " + config.SlackMsg
 
 	var jsonData = []byte(`{
-                "text": "` + send_text + `",
+                "text": "` + send_text + `"
         }`)
 
 	if connected() {
