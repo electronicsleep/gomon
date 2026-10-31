@@ -218,7 +218,36 @@ func checkSites(state stateStruct) stateStruct {
 
 			fmt.Println("INFO: check: n:", n, "of", checkNum)
 			fmt.Println("INFO: requestURL:", requestURL)
-			res, err := http.Get(requestURL)
+			client := &http.Client{Timeout: 30 * time.Second}
+
+			res, err := client.Get(requestURL)
+
+			var checkErr error
+			if err != nil {
+				checkErr = err
+			} else {
+				io.Copy(io.Discard, res.Body)
+				res.Body.Close()
+				if res.StatusCode != http.StatusOK {
+					checkErr = fmt.Errorf("bad status code: %d", res.StatusCode)
+				}
+			}
+
+			if checkErr != nil {
+				state.getState()
+				errorNum += 1
+				errStr := checkErr.Error()
+				logOutput("ERROR:", requestURL+" error: "+errStr)
+				fmt.Printf("ERROR: errorNum: %d errorNumAlert: %d err: %s\n", state.ErrorNum, errorNumAlert, checkErr)
+				if state.ErrorNum >= errorNumAlert {
+					postMessage("ALERT: error with site over 2 errors: " + requestURL + ": " + strconv.Itoa(state.ErrorNum) + " Date: " + tf)
+				}
+				fmt.Println("check: error with site: host: " + requestURL + " count: " + strconv.Itoa(state.ErrorNum) + " Date: " + tf)
+			} else {
+				logOutput("INFO: client ok", requestURL)
+				fmt.Println("INFO: client ok", requestURL, "status_code", res.StatusCode)
+				state.ErrorNum = 0
+			}
 			if err != nil {
 				state.getState()
 				errorNum += 1
@@ -234,6 +263,7 @@ func checkSites(state stateStruct) stateStruct {
 				fmt.Println("INFO: client ok", requestURL, "status_code", res.StatusCode)
 				io.Copy(io.Discard, res.Body)
 				res.Body.Close()
+				state.ErrorNum = 0
 			}
 
 			fmt.Print("INFO: errorNum: ")
